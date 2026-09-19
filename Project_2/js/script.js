@@ -1,0 +1,156 @@
+// Typing Animation
+
+const words = [
+    "Web Developer",
+    "Frontend Engineer",
+    "UI Designer",
+    "Creative Thinker"
+];
+
+let wordIndex = 0;
+let charIndex = 0;
+
+const typingElement = document.getElementById("typing");
+
+function type() {
+
+    if(charIndex < words[wordIndex].length){
+
+        typingElement.textContent +=
+        words[wordIndex].charAt(charIndex);
+
+        charIndex++;
+
+        setTimeout(type,100);
+
+    } else {
+
+        setTimeout(erase,1500);
+    }
+}
+
+function erase(){
+
+    if(charIndex > 0){
+
+        typingElement.textContent =
+        words[wordIndex].substring(0,charIndex-1);
+
+        charIndex--;
+
+        setTimeout(erase,50);
+
+    } else {
+
+        wordIndex++;
+
+        if(wordIndex >= words.length){
+            wordIndex = 0;
+        }
+
+        setTimeout(type,500);
+    }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    if(words.length){
+        setTimeout(type,500);
+    }
+});
+
+
+// Scroll Reveal Animation
+
+function reveal(){
+
+    const reveals =
+    document.querySelectorAll(".reveal");
+
+    reveals.forEach((element)=>{
+
+        const windowHeight =
+        window.innerHeight;
+
+        const revealTop =
+        element.getBoundingClientRect().top;
+
+        const revealPoint = 100;
+
+        if(revealTop < windowHeight - revealPoint){
+
+            element.classList.add("active");
+        }
+    });
+}
+
+window.addEventListener("scroll", reveal);
+reveal();
+
+const canvas = document.getElementById("particles");
+const ctx = canvas.getContext("2d");
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+const particles = [];
+
+for(let i=0;i<100;i++){
+
+    particles.push({
+        x:Math.random()*canvas.width,
+        y:Math.random()*canvas.height,
+        r:Math.random()*3+1,
+        dx:(Math.random()-0.5)*1,
+        dy:(Math.random()-0.5)*1
+    });
+}
+
+function animateParticles(){
+
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+
+    particles.forEach(p=>{
+
+        ctx.beginPath();
+        ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+        ctx.fillStyle="gold";
+        ctx.fill();
+
+        p.x+=p.dx;
+        p.y+=p.dy;
+
+        if(p.x<0 || p.x>canvas.width)
+            p.dx*=-1;
+
+        if(p.y<0 || p.y>canvas.height)
+            p.dy*=-1;
+    });
+
+    requestAnimationFrame(animateParticles);
+}
+
+animateParticles();
+const observer = new IntersectionObserver(entries => {
+
+    entries.forEach(entry => {
+
+        if(entry.isIntersecting){
+
+            entry.target.classList.add("show");
+        }
+
+    });
+
+});
+
+document.querySelectorAll(".hidden")
+.forEach(el => observer.observe(el));
+
+const cursor=document.querySelector(".cursor");
+
+document.addEventListener("mousemove",(e)=>{
+
+cursor.style.left=e.clientX+"px";
+cursor.style.top=e.clientY+"px";
+
+});
